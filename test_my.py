@@ -182,7 +182,7 @@ with tf.Session(config=config) as sess:
         print(frames.shape)
         for i in range(frames.shape[0]):
             #print('Scene {}: Frame {}/{} processing'.format(scene_name, i+1, frames.shape[0]))
-            print('Scene {}: {} processing'.format(scene_name, dir_frames[i][-13:-4]))
+            print('Scene {}: {} processing'.format(args.video_name, dir_frames[i][-13:-4]))
             in_L = frames_padded[i:i+T_in]  # select T_in frames
             #print('Frames padded')
             in_L = in_L[np.newaxis,:,:,:,:]
