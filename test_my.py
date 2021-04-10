@@ -102,7 +102,7 @@ with tf.Session(config=config) as sess:
     tf.global_variables_initializer().run()
 
     # Load parameters
-    LoadParams(sess, [params_G], in_file='/content/VSR-DUF/params_{}L_x{}.h5'.format(args.L, R))
+    LoadParams(sess, [params_G], in_file='/workspace/VSR-DUF/params_{}L_x{}.h5'.format(args.L, R))
     
     if args.T == 'G':
         # Test using GT videos
