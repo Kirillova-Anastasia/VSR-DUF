@@ -17,7 +17,11 @@ parser.add_argument('L', metavar='L', type=int, help='Network depth: One of 16, 
 parser.add_argument('T', metavar='T', help='Input type: L(Low-resolution) or G(Ground-truth)')
 parser.add_argument('test_dir', type=str, help='Path to test dir')
 parser.add_argument('save_dir', type=str, help='Path to save dir')
+parser.add_argument('video_name', type=str, help='Test video name')
 args = parser.parse_args()
+with open(os.path.join(args.save_dir, 'DUF-' + args.L + 'L.txt'), 'a') as f:
+    f.write('OK ' + args.video_name + '\n')
+begin = time.time()
 
 # Size of input temporal radius
 T_in = 7
@@ -156,32 +160,38 @@ with tf.Session(config=config) as sess:
      
     elif args.T == 'L':
         # Test using Low-resolution videos
-        dir_inputs = glob.glob(args.test_dir + '/*')
-        for v in dir_inputs:
-            scene_name = v.split('/')[-1]
-            if not os.path.exists(args.save_dir + '/{}L/{}/'):
-                os.mkdir(args.save_dir + '/{}L/{}/'.format(args.L, scene_name))
-            
-            dir_frames = glob.glob(v + '/*.png')
-            dir_frames.sort()
+        #dir_inputs = glob.glob(args.test_dir + '/*')
 
-            frames = []
-            for f in dir_frames:
-                frames.append(LoadImage(f))
-            frames = np.asarray(frames)
-            frames_padded = np.lib.pad(frames, pad_width=((T_in//2,T_in//2),(0,0),(0,0),(0,0)), mode='constant')
+        #for v in dir_inputs:
+            #scene_name = v.split('/')[-1]
+        if not os.path.exists(args.save_dir + '-{}L/{}/'.format(args.L, args.video_name)):
+            os.mkdir(args.save_dir + '-{}L/{}/'.format(args.L, args.video_name))
+        
+        #dir_frames = glob.glob(v + '/*.png')
+        dir_frames = os.listdir(os.path.join(args.test_dir, args.video_name))
+        dir_frames.sort()
+
+        frames = []
+        for f in dir_frames:
+            frames.append(LoadImage(f))
+        frames = np.asarray(frames)
+        frames_padded = np.lib.pad(frames, pad_width=((T_in//2,T_in//2),(0,0),(0,0),(0,0)), mode='constant')
+        
+        for i in range(frames.shape[0]):
+            #print('Scene {}: Frame {}/{} processing'.format(scene_name, i+1, frames.shape[0]))
+            print('Scene {}: {} processing'.format(scene_name, dir_frames[i][-13:-4]))
+            in_L = frames_padded[i:i+T_in]  # select T_in frames
+            #print('Frames padded')
+            in_L = in_L[np.newaxis,:,:,:,:]
+            #print('in_L is ready')
             
-            for i in range(frames.shape[0]):
-                #print('Scene {}: Frame {}/{} processing'.format(scene_name, i+1, frames.shape[0]))
-                print('Scene {}: {} processing'.format(scene_name, dir_frames[i][-12:-4]))
-                in_L = frames_padded[i:i+T_in]  # select T_in frames
-                #print('Frames padded')
-                in_L = in_L[np.newaxis,:,:,:,:]
-                #print('in_L is ready')
-                
-                out_H = sess.run(GH, feed_dict={L: in_L, is_train: False})
-                #print('sess.run is ended')
-                out_H = np.clip(out_H, 0, 1)
-                #print('Now I\'m going to save')
-                Image.fromarray(np.around(out_H[0,0]*255).astype(np.uint8)).save(args.save_dir + '/{}L/{}/{}.png'.format(args.L, scene_name, dir_frames[i][-12:-4]))
+            out_H = sess.run(GH, feed_dict={L: in_L, is_train: False})
+            #print('sess.run is ended')
+            out_H = np.clip(out_H, 0, 1)
+            #print('Now I\'m going to save')
+            Image.fromarray(np.around(out_H[0,0]*255).astype(np.uint8)).save(args.save_dir + '-{}L/{}/{}.png'.format(args.L, args.video_name, dir_frames[i][-13:-4]))
+
+end = time.time()
+with open(os.path.join(args.save_dir, 'DUF-' + args.L + 'L.txt'), 'a') as f:
+    f.write('Full time on {}: {}\n'.format(args.video_name, end - begin))
       
