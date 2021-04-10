@@ -167,16 +167,19 @@ with tf.Session(config=config) as sess:
         if not os.path.exists(args.save_dir + '-{}L/{}/'.format(args.L, args.video_name)):
             os.mkdir(args.save_dir + '-{}L/{}/'.format(args.L, args.video_name))
         
-        #dir_frames = glob.glob(v + '/*.png')
+        #dir_frames = glob.glob(v + '/*.png')\
         dir_frames = os.listdir(os.path.join(args.test_dir, args.video_name))
         dir_frames.sort()
+        print(dir_frames)
 
-        frames = []
+        #frames = []
         for f in dir_frames:
+            print(f)
             frames.append(LoadImage(f))
         frames = np.asarray(frames)
         frames_padded = np.lib.pad(frames, pad_width=((T_in//2,T_in//2),(0,0),(0,0),(0,0)), mode='constant')
         
+        print(frames.shape)
         for i in range(frames.shape[0]):
             #print('Scene {}: Frame {}/{} processing'.format(scene_name, i+1, frames.shape[0]))
             print('Scene {}: {} processing'.format(scene_name, dir_frames[i][-13:-4]))
