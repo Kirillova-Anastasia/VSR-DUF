@@ -19,7 +19,7 @@ parser.add_argument('--test_dir', type=str, help='Path to test dir')
 parser.add_argument('--save_dir', type=str, help='Path to save dir')
 parser.add_argument('--video_name', type=str, help='Test video name')
 args = parser.parse_args()
-with open(os.path.join(args.save_dir, 'DUF-' + args.L + 'L.txt'), 'a') as f:
+with open(os.path.join(args.save_dir, 'DUF-{}L.txt'.format(args.L)), 'a') as f:
     f.write('OK ' + args.video_name + '\n')
 begin = time.time()
 
@@ -192,6 +192,6 @@ with tf.Session(config=config) as sess:
             Image.fromarray(np.around(out_H[0,0]*255).astype(np.uint8)).save(args.save_dir + '-{}L/{}/{}.png'.format(args.L, args.video_name, dir_frames[i][-13:-4]))
 
 end = time.time()
-with open(os.path.join(args.save_dir, 'DUF-' + args.L + 'L.txt'), 'a') as f:
+with open(os.path.join(args.save_dir, 'DUF-{}L.txt'.format(args.L)), 'a') as f:
     f.write('Full time on {}: {}\n'.format(args.video_name, end - begin))
       
