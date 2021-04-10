@@ -172,7 +172,7 @@ with tf.Session(config=config) as sess:
         dir_frames.sort()
         print(dir_frames)
 
-        #frames = []
+        frames = []
         for f in dir_frames:
             print(f)
             frames.append(LoadImage(f))
