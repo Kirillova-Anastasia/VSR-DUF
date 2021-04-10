@@ -175,7 +175,7 @@ with tf.Session(config=config) as sess:
         frames = []
         for f in dir_frames:
             #print(f)
-            frames.append(LoadImage(join(args.test_dir, args.video_name, f))
+            frames.append(LoadImage(join(args.test_dir, args.video_name, f)))
         frames = np.asarray(frames)
         frames_padded = np.lib.pad(frames, pad_width=((T_in//2,T_in//2),(0,0),(0,0),(0,0)), mode='constant')
         
