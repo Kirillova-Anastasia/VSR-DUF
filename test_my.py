@@ -12,12 +12,12 @@ from utils import LoadImage, DownSample, AVG_PSNR, depth_to_space_3D, DynFilter3
 from nets import FR_16L, FR_28L, FR_52L
 
 parser = argparse.ArgumentParser()
-parser.add_argument('R', metavar='R', type=int, help='Upscaling factor: One of 2, 3, 4')
-parser.add_argument('L', metavar='L', type=int, help='Network depth: One of 16, 28, 52')
-parser.add_argument('T', metavar='T', help='Input type: L(Low-resolution) or G(Ground-truth)')
-parser.add_argument('test_dir', type=str, help='Path to test dir')
-parser.add_argument('save_dir', type=str, help='Path to save dir')
-parser.add_argument('video_name', type=str, help='Test video name')
+parser.add_argument('--R', metavar='R', type=int, help='Upscaling factor: One of 2, 3, 4')
+parser.add_argument('--L', metavar='L', type=int, help='Network depth: One of 16, 28, 52')
+parser.add_argument('--T', metavar='T', help='Input type: L(Low-resolution) or G(Ground-truth)')
+parser.add_argument('--test_dir', type=str, help='Path to test dir')
+parser.add_argument('--save_dir', type=str, help='Path to save dir')
+parser.add_argument('--video_name', type=str, help='Test video name')
 args = parser.parse_args()
 with open(os.path.join(args.save_dir, 'DUF-' + args.L + 'L.txt'), 'a') as f:
     f.write('OK ' + args.video_name + '\n')
