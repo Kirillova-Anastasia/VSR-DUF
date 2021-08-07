@@ -1,3 +1,7 @@
+# Running on your own dataset
+1) We used `pytorch/pytorch:1.0.1-cuda10.0-cudnn7-devel` docker. Directory with input images is mounted as `/dataset`, results will be saved in `/output`, directory with code is mounted as `/DUF`.
+2) Enter directory `/DUF`. See `DUF.sh` script for installation commands and running example.
+
 # Deep Video Super-Resolution Network Using Dynamic Upsampling Filters Without Explicit Motion Compensation
 
 This is a tensorflow implementation of the paper. [PDF](http://yhjo09.github.io/files/VSR-DUF_CVPR18.pdf)
